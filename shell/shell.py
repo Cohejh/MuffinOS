@@ -54,4 +54,9 @@ def shell(username):
                     file = open(split_cmd[2],"x")
                     file.close()
                 except FileExistsError:
-                    print("[Error]: This file already exists! Please choose a different name")
+                    print("[Error]: This file already exists! Please choose a different name or delete this file.")
+            if split_cmd[1] == "--folder":
+                try:
+                    os.mkdir(split_cmd[2])
+                except FileExistsError:
+                    print("[Error]: This folder already exists! Please choose a different name or delete this folder")
