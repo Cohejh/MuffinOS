@@ -1,0 +1,11 @@
+[MuffinOS Config File]
+// Please do not touch unless you know what you are doing
+1. Update URL:
+sss
+2. Enable Debug:
+no
+3. Version
+1.0
+4. Enable Updates:
+yes
+[ENDFILE]
