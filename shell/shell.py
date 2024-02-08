@@ -1,6 +1,7 @@
 def shell(username):
     import zipfile
     import shutil
+    import sys
     import os
     terminate = 0
     while terminate == 0:
@@ -60,3 +61,13 @@ def shell(username):
                     os.mkdir(split_cmd[2])
                 except FileExistsError:
                     print("[Error]: This folder already exists! Please choose a different name or delete this folder")
+            else:
+                print("[Error]: Flag \"" + split_cmd[1] + "\" is invalid. Are you sure you typed it correctly?")
+
+        # Text Editor
+        if split_cmd[0] == "text":
+            current_dir = os.getcwd()
+            current_dir = current_dir.removesuffix("\\shell").removesuffix("/shell")
+            sys.path.insert(1, (current_dir + "/default_apps") )
+            from text_editor import text_editor
+            text_editor()
