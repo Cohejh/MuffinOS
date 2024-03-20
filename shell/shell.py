@@ -16,8 +16,18 @@ def shell(username, path):
             unit += 1
         sizes = ["b", "KB", "MB", "GB", "TB"]
         return (str(round(final, 2)) + sizes[unit])
+    def relative_path(path):
+        left_path = str(path).removeprefix(current_dir).removeprefix("\home").removeprefix("/home")
+        if path == current_dir:
+            return "/"
+        elif (current_dir + "/home") not in path and (current_dir + "\home") not in path:
+            return str(path).removeprefix(current_dir).replace("\\", "/")
+        elif left_path == "":
+            return "~"
+        else:
+            return "~/" + left_path.removeprefix("\\").replace("\\", "/")
     while terminate == 0:
-        command = input(username + " $ ")
+        command = input(f"{username} ({relative_path(os.getcwd())}) $ ")
         split_cmd = command.split()
         # Quit Command
         if command == "quit":
@@ -110,38 +120,63 @@ def shell(username, path):
             text_editor()
         # Change Directory
         if split_cmd[0] == "cd":
+            active_dir = os.getcwd()
             try:
                 if "--help" in split_cmd:
                     print("[Usage]: Changes the current directory\ncd -r (optional, enables root access) <path>\ne.g. cd MyDir")
                 elif "-r" in split_cmd:
-                    os.chdir(current_dir + "/" + split_cmd[2])
+                    if split_cmd[2] == "/":
+                        os.chdir(current_dir)
+                    else:
+                        os.chdir(current_dir + "/" + split_cmd[2])
                 else:
-                    os.chdir(current_dir + "/home/" + split_cmd[1])
+                    if split_cmd[1] == "~":
+                        os.chdir(current_dir + "/home")
+                    else:
+                        os.chdir(active_dir + "/" + split_cmd[1])
             except IndexError:
                 print("[Error]: No path specified, please provide a path.")
             except FileNotFoundError:
                 print("[Error]: This directory does not exist, are you sure you typed the name correctly?")
         # List Items
         if split_cmd[0] == "ldir":
-            items = os.listdir()
-            files = []
-            folders = []
-            files_size = 0
-            folders_size = 0
-            for item in items:
-                if os.path.isfile(item):
-                    files.append(item)
-                    files_size = files_size + os.path.getsize(item)
+            if "--help" in split_cmd:
+                print("[Usage]: Lists all the items in the current working directory\nldir\ne.g. ldir")
+            else:
+                items = os.listdir()
+                files = []
+                folders = []
+                files_size = 0
+                folders_size = 0
+                folders_count = 0
+                for item in items:
+                    if os.path.isfile(item):
+                        files.append(item)
+                        files_size = files_size + os.path.getsize(item)
+                    else:
+                        folders.append(item)
+                        folders_size = folders_size + os.path.getsize(item)
+                        folders_count += 1
+                if files_size + folders_size == 0 and folders_count == 0:
+                    print("This directory is currently empty.")
                 else:
-                    folders.append(item)
-                    folders_size = folders_size + os.path.getsize(item)
-            print(f"Files ({size_conversion(files_size)} total size.)")
-            for file in files:
-                print(f"    {file} - {size_conversion(os.path.getsize(file))}")
-            print(f"Folders ({size_conversion(folders_size)} total size.)")
-            for folder in folders:
-                print(f"    {folder} - {round(os.path.getsize(folder) / 1024 ** 1,3)}KB")
+                    if files_size != 0:
+                        print(f"Files ({size_conversion(files_size)} total size.):")
+                        for file in files:
+                            print(f"    {file} - {size_conversion(os.path.getsize(file))}")
+                    if folders_size != 0:
+                        print(f"Folders ({size_conversion(folders_size)} total size.):")
+                        for folder in folders:
+                            if os.path.getsize(folder) != 0:
+                                print(f"    {folder} - {size_conversion(os.path.getsize(folder))}")
+                            else:
+                                print(f"    {folder} - Empty")
+                    elif folders_size == 0 and folders_count != 0:
+                        print(f"Folders:")
+                        for folder in folders:
+                            print(f"    {folder} - Empty")
         # Directory Info
+        
         # PKG
         if split_cmd[0] == "tide":
             os.system("python C:/Users/jcohe/Desktop/MuffinOS/pkg/pkgs/tide.py")
