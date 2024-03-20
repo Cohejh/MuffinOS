@@ -22,6 +22,9 @@ if settings[7] == "yes\n":
         print("Update Avaliable!")
     else:
         print("No avaliable updates found.")
+# Check if Home exists, as otherwise issues may occur.
+if os.path.isdir('home') == False:
+    os.mkdir('home')
 shell_path = current_dir + "/shell"
 sys.path.insert(0, shell_path)
 from shell import shell
