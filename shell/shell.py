@@ -3,7 +3,7 @@ def shell(username, path, ):
     from pathlib import Path
     global current_dir
     current_dir = os.getcwd()
-    current_dir = current_dir.removesuffix("\\shell").removesuffix("/shell").removesuffix("\shell").removesuffix("//shell")
+    current_dir = current_dir.removesuffix("\\\\shell").removesuffix("/shell").removesuffix("\\shell").removesuffix("//shell")
     os.chdir(path + "/home")
     
     while (True):
