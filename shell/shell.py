@@ -20,7 +20,7 @@ def shell(username, path):
         left_path = str(path).removeprefix(current_dir).removeprefix("\home").removeprefix("/home")
         if path == current_dir:
             return "/"
-        elif (current_dir + "/home") not in path and (current_dir + "\home") not in path:
+        elif (current_dir + "/home") not in path and (current_dir + "\\home") not in path:
             return str(path).removeprefix(current_dir).replace("\\", "/")
         elif left_path == "":
             return "~"
