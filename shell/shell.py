@@ -1,7 +1,7 @@
 def shell(username, path):
     import zipfile, shutil, sys, os
     current_dir = os.getcwd()
-    current_dir = current_dir.removesuffix("\\shell").removesuffix("/shell").removesuffix("\shell").removesuffix("//shell")
+    current_dir = current_dir.removesuffix("\\\\shell").removesuffix("/shell").removesuffix("\\shell").removesuffix("//shell")
     sys.path.insert(1, (current_dir + "/default_apps") )
     from text_editor import text_editor
     sys.path.insert(2, (current_dir + "/pkg"))
