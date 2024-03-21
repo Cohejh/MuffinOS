@@ -3,8 +3,15 @@ def shell(username, path, ):
     from pathlib import Path
     global current_dir
     current_dir = os.getcwd()
+    from suppress import suppress_stdout
     current_dir = current_dir.removesuffix("\\\\shell").removesuffix("/shell").removesuffix("\\shell").removesuffix("//shell")
+    os.chdir(path)
+    bootup_scripts = open("startup.msh", "r")
     os.chdir(path + "/home")
+    for cmd in bootup_scripts.readlines():
+        with suppress_stdout():
+            if cmd[:3] != "// ":
+                run_cmd(cmd)
     
     while (True):
         command = input(f"{username} ({shorten_text(relative_path(os.getcwd()), 20)}) $ ")
